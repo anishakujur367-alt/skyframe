@@ -1,178 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NASA APOD – Astronomy Picture of the Day</title>
-  <meta name="description"
-    content="Explore NASA's Astronomy Picture of the Day. Browse stunning space images, save favorites, and travel through cosmic history." />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap"
-    rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skyframe</title>
 </head>
 
-<body class="dark-theme" id="app-body">
-  <!-- ===== STAR BACKGROUND ===== -->
-  <div class="stars-container" id="stars-container"></div>
+<body>
 
-  <!-- ===== TOP NAVIGATION BAR ===== -->
-  <nav class="navbar">
-    <div class="nav-brand">
-      <span class="nav-logo">🚀</span>
-      <span class="nav-title">NASA APOD</span>
-    </div>
+  <h1>Skyframe</h1>
 
-    <div class="nav-actions">
-      <!-- Theme Toggle Button -->
-      <button class="btn btn-icon" id="theme-toggle-btn" title="Toggle Theme">
-        <span id="theme-icon">☀️</span>
-      </button>
+ 
+  <!-- <h2 id="title">Loading...</h2> -->
 
-      <!-- Favorites Panel Toggle -->
-      <button class="btn btn-icon" id="fav-panel-btn" title="My Favorites">
-        ⭐ <span class="badge" id="fav-count">0</span>
-      </button>
 
-      <!-- History Panel Toggle -->
-      <button class="btn btn-icon" id="history-panel-btn" title="View History">
-        🕐 <span class="badge" id="history-count">0</span>
-      </button>
-    </div>
-  </nav>
+  <img id="image" />
 
-  <!-- ===== MAIN LAYOUT ===== -->
-  <main class="main-container">
+ 
+  <p id="desc"></p>
 
-    <!-- ===== CONTROL PANEL (Date Picker + Buttons) ===== -->
-    <section class="control-panel" id="control-panel">
-      <h1 class="page-title">Astronomy Picture of the Day</h1>
-      <p class="page-subtitle">Discover the cosmos – one image at a time</p>
+  <div id="container"></div>
 
-      <div class="controls-row">
-        <!-- Date Picker -->
-        <div class="input-group">
-          <label for="date-picker" class="input-label">📅 Select Date</label>
-          <input type="date" id="date-picker" class="date-input" title="Pick a date to view its APOD" />
-        </div>
 
-        <!-- Fetch Button -->
-        <button class="btn btn-primary" id="fetch-btn">
-          🔭 Explore
-        </button>
+  <script src="script.js"></script>
 
-        <!-- Random Date Button -->
-        <button class="btn btn-secondary" id="random-btn">
-          🎲 Random
-        </button>
-
-        <!-- Today Button -->
-        <button class="btn btn-outline" id="today-btn">
-          🌍 Today
-        </button>
-      </div>
-    </section>
-
-    <!-- ===== LOADING SPINNER ===== -->
-    <div class="loader-wrapper" id="loader" style="display: none;">
-      <div class="orbit-loader">
-        <div class="orbit-ring"></div>
-        <div class="orbit-planet">🪐</div>
-      </div>
-      <p class="loader-text">Traveling through space...</p>
-    </div>
-
-    <!-- ===== ERROR MESSAGE ===== -->
-    <div class="error-box" id="error-box" style="display: none;">
-      <span class="error-icon">⚠️</span>
-      <p id="error-message">Something went wrong. Please try again.</p>
-      <button class="btn btn-outline" id="error-retry-btn">Retry</button>
-    </div>
-
-    <!-- ===== APOD CARD ===== -->
-    <section class="apod-card" id="apod-card" style="display: none;">
-
-      <!-- Card Header: Title + Date + Favorite Button -->
-      <div class="card-header">
-        <div class="card-title-group">
-          <h2 class="apod-title" id="apod-title">Loading...</h2>
-          <p class="apod-date" id="apod-date">--</p>
-        </div>
-        <button class="btn btn-fav" id="fav-btn" title="Add to Favorites">
-          ☆ Save
-        </button>
-      </div>
-
-      <!-- Media Display Area (Image or Video) -->
-      <div class="media-wrapper" id="media-wrapper">
-        <!-- Image will be inserted here by JavaScript -->
-      </div>
-
-      <!-- HD Toggle (only for images) -->
-      <div class="hd-toggle-row" id="hd-toggle-row" style="display: none;">
-        <label class="toggle-label">
-          <span>HD Quality</span>
-          <div class="toggle-switch">
-            <input type="checkbox" id="hd-toggle" />
-            <span class="toggle-slider"></span>
-          </div>
-        </label>
-        <span class="hd-badge" id="hd-badge">SD</span>
-      </div>
-
-      <!-- APOD Description / Explanation -->
-      <div class="card-body">
-        <h3 class="section-label">📖 Explanation</h3>
-        <p class="apod-explanation" id="apod-explanation">--</p>
-        <p class="apod-copyright" id="apod-copyright"></p>
-      </div>
-
-    </section>
-
-  </main>
-
-  <!-- ===== FULLSCREEN IMAGE MODAL ===== -->
-  <div class="modal-overlay" id="image-modal" style="display: none;">
-    <div class="modal-inner">
-      <button class="modal-close-btn" id="modal-close-btn">✕</button>
-      <img src="" alt="Full screen view" class="modal-image" id="modal-image" />
-      <p class="modal-caption" id="modal-caption"></p>
-    </div>
-  </div>
-
-  <!-- ===== FAVORITES SIDE PANEL ===== -->
-  <aside class="side-panel" id="fav-panel">
-    <div class="panel-header">
-      <h3 class="panel-title">⭐ Favorites</h3>
-      <button class="panel-close-btn" id="fav-close-btn">✕</button>
-    </div>
-    <div class="panel-list" id="fav-list">
-      <!-- Favorite items will be added here by JavaScript -->
-      <p class="empty-state">No favorites yet.<br />Click ☆ Save on an image!</p>
-    </div>
-  </aside>
-
-  <!-- ===== HISTORY SIDE PANEL ===== -->
-  <aside class="side-panel" id="history-panel">
-    <div class="panel-header">
-      <h3 class="panel-title">🕐 History</h3>
-      <button class="panel-close-btn" id="history-close-btn">✕</button>
-      <button class="btn btn-outline btn-sm" id="clear-history-btn">Clear All</button>
-    </div>
-    <div class="panel-list" id="history-list">
-      <!-- History items will be added here by JavaScript -->
-      <p class="empty-state">No history yet.<br />Start exploring!</p>
-    </div>
-  </aside>
-
-  <!-- ===== PANEL BACKDROP (click to close panels) ===== -->
-  <div class="panel-backdrop" id="panel-backdrop" style="display: none;"></div>
-
-  <!-- Link to JavaScript -->
-  <script src="script.js?v=2"></script>
 </body>
-
 </html>
