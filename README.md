@@ -2,7 +2,7 @@
 
 ## Project Description
 
-Celestial Canvas is a web application that allows users to explore NASA's Astronomy Picture of the Day (APOD). Users can select a specific date to view space images along with their title and detailed explanation. The project focuses on providing an interactive and visually appealing way to explore space data.
+ Skyframe is a web application that allows users to explore NASA's Astronomy Picture of the Day (APOD). Users can select a specific date to view space images along with their title and detailed explanation. The project focuses on providing an interactive and visually appealing way to explore space data.
 
 ---
 
