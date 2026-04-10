@@ -1,3 +1,4 @@
+const API_KEY = "Wm0kCw3Egwl1NNwiGzIir5BLnWMEVwwn7dJgHdpZ"; // Replace with your own key
 
 const container = document.getElementById("container");
 const loading = document.getElementById("loading");
