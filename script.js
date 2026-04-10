@@ -1,4 +1,3 @@
-const API_KEY = "YOUR_API_KEY"; // Replace with your own key
 
 const container = document.getElementById("container");
 const loading = document.getElementById("loading");
@@ -53,7 +52,7 @@ const fetchData = async () => {
     const start = past.toISOString().split("T")[0];
 
     const res = await fetch(
-      `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&start_date=${start}&end_date=${end}`
+      `https://api.nasa.gov/planetary/apod?api_key=Wm0kCw3Egwl1NNwiGzIir5BLnWMEVwwn7dJgHdpZ&start_date=${start}&end_date=${end}`
     );
 
     const data = await res.json();

@@ -1,5 +1,0 @@
-# Local environment variables
-.env
-
-# MacOS artifacts
-.DS_Store
