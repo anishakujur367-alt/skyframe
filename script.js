@@ -1,3 +1,4 @@
+const API_KEY = "YOUR_API_KEY"; // Replace with your own key
 
 const container = document.getElementById("container");
 const loading = document.getElementById("loading");
@@ -14,11 +15,16 @@ const backdrop = document.getElementById("backdrop");
 
 const loadMoreBtn = document.getElementById("loadMore");
 
+// 🆕 Filter buttons
+const showLikedBtn = document.getElementById("showLiked");
+const showFavoritesBtn = document.getElementById("showFavorites");
+
 let apodData = [];
 let currentIndex = 0;
 const itemsPerLoad = 20;
 let displayIndex = 0;
 let isViewingSingleDate = false;
+let currentView = "all";
 let currentlyExpandedBtn = null;
 
 // Backdrop close listener
@@ -36,6 +42,7 @@ const exitSingleDateMode = () => {
 // 🚀 Fetch Data (last 60 days)
 const fetchData = async () => {
   try {
+    loading.style.display = "block";
     loading.innerText = "Loading...";
 
     const today = new Date();
@@ -46,11 +53,25 @@ const fetchData = async () => {
     const start = past.toISOString().split("T")[0];
 
     const res = await fetch(
-      `https://api.nasa.gov/planetary/apod?api_key=Wm0kCw3Egwl1NNwiGzIir5BLnWMEVwwn7dJgHdpZ&start_date=${start}&end_date=${end}`
+      `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&start_date=${start}&end_date=${end}`
     );
 
     const data = await res.json();
-    apodData = data;
+
+    // ✅ Guard: NASA API returned an error object instead of an array
+    if (!Array.isArray(data)) {
+      const errMsg = data?.error?.message || data?.msg || "Unexpected API response";
+      console.error("NASA API Error:", data);
+      loading.innerText = `⚠️ ${errMsg}`;
+      return;
+    }
+
+    // ✅ 1. Initialize liked & favorited state on every item
+    apodData = data.map(item => ({
+      ...item,
+      liked: false,
+      favorited: false,
+    }));
 
     renderData(apodData, false);
     loading.style.display = "none";
@@ -75,7 +96,7 @@ datePicker.addEventListener('change', async () => {
 
   try {
     const res = await fetch(
-      `https://api.nasa.gov/planetary/apod?api_key=Wm0kCw3Egwl1NNwiGzIir5BLnWMEVwwn7dJgHdpZ&date=${date}`
+      `https://api.nasa.gov/planetary/apod?api_key=${API_KEY}&date=${date}`
     );
 
     const data = await res.json();
@@ -90,14 +111,19 @@ datePicker.addEventListener('change', async () => {
       // We still want to show the back button so the user can return!
       isViewingSingleDate = true;
       backBtn.style.display = "inline-block";
+      backBtn.innerText = "⬅ Back to All Dates";
       loadMoreBtn.style.display = "none";
       return;
     }
 
     isViewingSingleDate = true;
     backBtn.style.display = "inline-block";
+    backBtn.innerText = "⬅ Back to All Dates";
     loadMoreBtn.style.display = "none";
-    renderData([data], false, true);
+
+    // ✅ Ensure single-date item also has liked/favorited state
+    const singleItem = { ...data, liked: false, favorited: false };
+    renderData([singleItem], false, true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
   } catch (error) {
@@ -109,7 +135,9 @@ datePicker.addEventListener('change', async () => {
 
 backBtn.onclick = () => {
   exitSingleDateMode();
+  currentView = "all";
   renderData(apodData, false, false);
+  searchInput.value = ""; // Also clear search just in case
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
@@ -128,8 +156,15 @@ const renderData = (data, append = false, isSingleDate = false) => {
     container.classList.remove('single-date-view');
   }
 
+  // ✅ 7. Handle empty filtered results
+  if (data.length === 0) {
+    container.innerHTML = `<p style="text-align:center; font-size:1.2rem; padding: 40px; opacity: 0.7;">No items found</p>`;
+    return;
+  }
+
   const slice = data.slice(currentIndex, currentIndex + itemsPerLoad);
 
+  // ✅ 8. Use map() + forEach — no raw loops
   slice.forEach(item => {
     if (!item.url) return; // skip missing data
     if (!isSingleDate && item.media_type === "video") return; // skip videos in normal view
@@ -198,24 +233,36 @@ const renderData = (data, append = false, isSingleDate = false) => {
       }
     };
 
-    // ❤️ Like
+    // ✅ 2. Like button — toggles item.liked on the data object
     const likeBtn = document.createElement("button");
-    likeBtn.innerText = "🤍 Like";
+    likeBtn.innerText = item.liked ? "❤️ Liked" : "🤍 Like";
 
-    let liked = false;
     likeBtn.onclick = () => {
-      liked = !liked;
-      likeBtn.innerText = liked ? "❤️ Liked" : "🤍 Like";
+      item.liked = !item.liked;
+      likeBtn.innerText = item.liked ? "❤️ Liked" : "🤍 Like";
+
+      if (currentView === "liked" && !item.liked) {
+        card.remove();
+        if (container.children.length === 0) {
+          container.innerHTML = `<p style="text-align:center; font-size:1.2rem; padding: 40px; opacity: 0.7;">No items found</p>`;
+        }
+      }
     };
 
-    // ⭐ Favorite
+    // ✅ 2. Favorite button — toggles item.favorited on the data object
     const favBtn = document.createElement("button");
-    favBtn.innerText = "⭐ Favorite";
+    favBtn.innerText = item.favorited ? "🌟 Favorited" : "⭐ Favorite";
 
-    let fav = false;
     favBtn.onclick = () => {
-      fav = !fav;
-      favBtn.innerText = fav ? "🌟 Favorited" : "⭐ Favorite";
+      item.favorited = !item.favorited;
+      favBtn.innerText = item.favorited ? "🌟 Favorited" : "⭐ Favorite";
+
+      if (currentView === "favorites" && !item.favorited) {
+        card.remove();
+        if (container.children.length === 0) {
+          container.innerHTML = `<p style="text-align:center; font-size:1.2rem; padding: 40px; opacity: 0.7;">No items found</p>`;
+        }
+      }
     };
 
     card.append(title, media, desc, viewBtn, likeBtn, favBtn);
@@ -230,9 +277,32 @@ loadMoreBtn.onclick = () => {
   renderData(apodData, true);
 };
 
+// ✅ 3 & 4. Filter: Show Liked
+showLikedBtn.onclick = () => {
+  exitSingleDateMode();
+  currentView = "liked";
+  const likedItems = apodData.filter(item => item.liked === true);
+  renderData(likedItems, false);
+  backBtn.style.display = "inline-block";
+  backBtn.innerText = "⬅ Back to All Items";
+  loadMoreBtn.style.display = "none";
+};
+
+// ✅ 3 & 4. Filter: Show Favorites
+showFavoritesBtn.onclick = () => {
+  exitSingleDateMode();
+  currentView = "favorites";
+  const favItems = apodData.filter(item => item.favorited === true);
+  renderData(favItems, false);
+  backBtn.style.display = "inline-block";
+  backBtn.innerText = "⬅ Back to All Items";
+  loadMoreBtn.style.display = "none";
+};
+
 // 🔍 Search
 searchInput.addEventListener("input", () => {
   exitSingleDateMode();
+  currentView = searchInput.value ? "search" : "all";
   const query = searchInput.value.toLowerCase();
   const filtered = apodData.filter(item =>
     item.title.toLowerCase().includes(query)
@@ -244,6 +314,7 @@ searchInput.addEventListener("input", () => {
 // 📊 Sort
 sortDropdown.addEventListener("change", (e) => {
   exitSingleDateMode();
+  currentView = "sorted";
   if (e.target.value === "az") {
     renderData([...apodData].sort((a, b) => a.title.localeCompare(b.title)), false);
   } else if (e.target.value === "za") {
@@ -279,10 +350,11 @@ toggleBtn.onclick = () => {
 
 
 
-// 🔄 Auto UI Rotation (10 min)
+// 🔄 Auto UI Rotation (30s)
 setInterval(() => {
   if (apodData.length === 0) return;
   if (isViewingSingleDate) return;
+  if (currentView !== "all") return; // Keep data static while user interacts with filters/search
 
   const next = apodData.slice(displayIndex, displayIndex + 16);
   renderData(next, false);
@@ -290,7 +362,7 @@ setInterval(() => {
   displayIndex += 16;
   if (displayIndex >= apodData.length) displayIndex = 0;
 
-}, 30000); 
+}, 30000);
 
 // 🚀 Start
 fetchData();

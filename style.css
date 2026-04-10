@@ -141,28 +141,47 @@ button:hover {
     filter: brightness(1.1);
 }
 
-/* Special Button Overrides */
-#toggleTheme {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    padding: 0;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #1e293b, #334155);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    margin: 0;
-    z-index: 1000;
+/* Top-right icon button group */
+#topRightIcons {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: center !important;
+    z-index: 9999 !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
-body[style*="background-color: white"] #toggleTheme {
+
+#topRightIcons button {
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 1.4rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: linear-gradient(135deg, #1e293b, #334155) !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3) !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+}
+
+#topRightIcons button:hover {
+    transform: scale(1.15);
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.5);
+    filter: brightness(1.2);
+}
+
+body[style*="background-color: white"] #topRightIcons button {
     background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
     color: #0f172a;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
 #backBtn {
