@@ -362,7 +362,7 @@ setInterval(() => {
   displayIndex += 16;
   if (displayIndex >= apodData.length) displayIndex = 0;
 
-}, 30000);
+}, 60000);
 
 // 🚀 Start
 fetchData();
