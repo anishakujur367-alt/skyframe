@@ -17,39 +17,39 @@
 
   <p id="loading">Loading...</p>
 
-  <!-- 📅 Date -->
+
   <input type="date" id="datePicker">
 
-  <!-- 🔍 Search -->
+
   <input type="text" id="search" placeholder="Search by title..." />
 
 
-  <!-- 📊 Sort -->
+
   <select id="sortDropdown">
     <option value="" disabled selected>Sort by...</option>
     <option value="az">Sort A-Z</option>
     <option value="za">Sort Z-A</option>
   </select>
 
-  <!-- 🌙 Theme + Filter Icons (top-right) -->
+
   <div id="topRightIcons" style="position:fixed;top:20px;right:20px;display:flex;flex-direction:column;gap:10px;align-items:center;z-index:9999;margin:0;padding:0;">
     <button id="toggleTheme">☀️</button>
     <button id="showLiked" title="Show Liked">❤️</button>
     <button id="showFavorites" title="Show Favorites">⭐</button>
   </div>
 
-  <!-- Modal Overlay Backdrop -->
+
   <div id="backdrop" class="modal-backdrop"></div>
 
-  <!-- 📦 Data -->
+
   <div id="container"></div>
 
-  <!-- 🔙 Back Button -->
+  
   <button id="backBtn"
     style="display: none; background-color: #ff4757; color: white; border: none; padding: 12px 28px; border-radius: 50px; cursor: pointer; margin: 20px auto; font-size: 1rem; font-weight: 600;">⬅
     Back </button>
 
-  <!-- 🔽 Load More -->
+  
   <button id="loadMore">Load More</button>
 
   <script src="script.js?v=2"></script>

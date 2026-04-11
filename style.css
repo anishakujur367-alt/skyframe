@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
 
-/* --- Base Space Theme (Default Dark) --- */
+
 body {
     margin: 0;
     padding: 0;
@@ -8,7 +8,7 @@ body {
     text-align: center;
     min-height: 100vh;
     
-    /* Deep space gradient */
+    
     background: #020617 radial-gradient(circle at top right, #1e1b4b 0%, #020617 70%) !important;
     background-attachment: fixed !important;
     color: #e2e8f0 !important;
@@ -16,14 +16,13 @@ body {
     transition: background 0.5s ease, color 0.5s ease;
 }
 
-/* --- Light Mode (Day Sky) Override --- */
+
 body[style*="background-color: white"] {
     background: #f8fafc radial-gradient(circle at top right, #e0e7ff 0%, #f8fafc 80%) !important;
     background-attachment: fixed !important;
     color: #0f172a !important;
 }
 
-/* Custom Webkit Scrollbar */
 ::-webkit-scrollbar {
     width: 10px;
 }
@@ -38,7 +37,6 @@ body[style*="background-color: white"] ::-webkit-scrollbar-track {
     border-radius: 10px;
 }
 
-/* --- Beautiful Header --- */
 .sky-header {
     padding: 50px 20px 20px;
     animation: fadeInDown 1s ease-out;
@@ -49,7 +47,7 @@ body[style*="background-color: white"] ::-webkit-scrollbar-track {
     font-weight: 800;
     margin: 0;
     
-    /* Neon cosmic gradient text */
+    
     background: linear-gradient(to right, #38bdf8, #c084fc, #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -68,7 +66,7 @@ body[style*="background-color: white"] .sky-subtitle {
     color: #64748b;
 }
 
-/* --- Inputs, Selects, and General Buttons --- */
+
 input[type="text"], input[type="date"], select {
     padding: 12px 24px;
     margin: 10px 5px;
@@ -119,7 +117,6 @@ input:focus, select:focus {
     box-shadow: 0 0 15px rgba(192, 132, 252, 0.4) !important;
 }
 
-/* Cosmic Primary Buttons */
 button {
     padding: 12px 28px;
     margin: 10px 5px;
@@ -141,7 +138,7 @@ button:hover {
     filter: brightness(1.1);
 }
 
-/* Top-right icon button group */
+
 #topRightIcons {
     position: fixed !important;
     top: 20px !important;
@@ -200,7 +197,7 @@ body[style*="background-color: white"] #topRightIcons button {
     margin: 0 auto;
 }
 
-/* Individual Cards */
+
 #container div {
     background: rgba(30, 41, 59, 0.5) !important;
     backdrop-filter: blur(16px);
@@ -208,7 +205,7 @@ body[style*="background-color: white"] #topRightIcons button {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
     padding: 25px !important;
-    margin: 0 !important; /* Overrides inline margin */
+    margin: 0 !important; 
     width: 330px !important;
     text-align: left;
     display: flex;
@@ -227,7 +224,7 @@ body[style*="background-color: white"] #container div {
 #container div:hover {
     transform: translateY(-12px) scale(1.02);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    border-color: rgba(192, 132, 252, 0.5); /* Glow on border */
+    border-color: rgba(192, 132, 252, 0.5); 
 }
 
 body[style*="background-color: white"] #container div:hover {
@@ -235,9 +232,9 @@ body[style*="background-color: white"] #container div:hover {
     border-color: #c084fc;
 }
 
-/* Images inside cards */
+
 #container div img {
-    width: 100% !important; /* Overrides inline 300px */
+    width: 100% !important; 
     height: 250px;
     object-fit: cover;
     border-radius: 12px;
@@ -249,7 +246,7 @@ body[style*="background-color: white"] #container div:hover {
     transform: scale(1.03);
 }
 
-/* Card Text */
+
 #container div h3 {
     font-size: 1.4rem;
     font-weight: 600;
@@ -266,13 +263,12 @@ body[style*="background-color: white"] #container div h3 {
     color: #cbd5e1;
     line-height: 1.6;
     margin-bottom: 25px;
-    flex-grow: 1; /* Pushes buttons down */
+    flex-grow: 1; 
 }
 body[style*="background-color: white"] #container div p {
     color: #475569;
 }
 
-/* Card Micro-Buttons (View More, Like, Favorite) */
 #container div button {
     margin: 5px 4px 0 0;
     padding: 8px 16px;
@@ -298,7 +294,6 @@ body[style*="background-color: white"] #container div button {
     box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
 }
 
-/* Single Date Highlight Container */
 .single-date-view {
     position: relative;
     padding: 60px 40px !important;
@@ -323,7 +318,6 @@ body[style*="background-color: white"] #container div button {
     box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
 }
 
-/* Loading animation pulse */
 #loading {
     font-size: 1.2rem;
     font-weight: 600;
@@ -341,11 +335,10 @@ body[style*="background-color: white"] #container div button {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* --- Expandable Modal Layout (Square Card View) --- */
 .modal-backdrop {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(2, 6, 23, 0.85); /* Dark space overlay */
+    background: rgba(2, 6, 23, 0.85); 
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 999;
@@ -363,13 +356,13 @@ body[style*="background-color: white"] .modal-backdrop {
 }
 
 #container div.expanded-card {
-    position: fixed !important; /* Forces forward */
+    position: fixed !important; 
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
     z-index: 1000 !important;
     width: 650px !important;
-    height: 650px !important; /* Square shape restriction */
+    height: 650px !important; 
     max-width: 95vw !important;
     max-height: 95vh !important;
     overflow-y: auto !important;
@@ -381,18 +374,17 @@ body[style*="background-color: white"] #container div.expanded-card {
     box-shadow: 0 30px 80px rgba(0,0,0,0.3) !important;
 }
 
-/* Prevent hover transforms from misaligning the modal center */
+
 #container div.expanded-card:hover {
     transform: translate(-50%, -50%) scale(1) !important;
 }
 
-/* Specific styling to ensure image isn't cropped but scales smartly */
 #container div.expanded-card img {
-    object-fit: contain !important; /* Don't cut image */
+    object-fit: contain !important; 
     max-height: 50% !important;
     width: 100% !important;
     height: auto !important;
-    background: rgba(0,0,0,0.15) !important; /* Small backdrop to show the area clearly */
+    background: rgba(0,0,0,0.15) !important; 
 }
 
 @keyframes fadeIn {

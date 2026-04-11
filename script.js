@@ -1,4 +1,4 @@
-const API_KEY = "Wm0kCw3Egwl1NNwiGzIir5BLnWMEVwwn7dJgHdpZ"; // Replace with your own key
+const API_KEY = "Wm0kCw3Egwl1NNwiGzIir5BLnWMEVwwn7dJgHdpZ"; 
 
 const container = document.getElementById("container");
 const loading = document.getElementById("loading");
@@ -15,7 +15,6 @@ const backdrop = document.getElementById("backdrop");
 
 const loadMoreBtn = document.getElementById("loadMore");
 
-// 🆕 Filter buttons
 const showLikedBtn = document.getElementById("showLiked");
 const showFavoritesBtn = document.getElementById("showFavorites");
 
@@ -27,19 +26,19 @@ let isViewingSingleDate = false;
 let currentView = "all";
 let currentlyExpandedBtn = null;
 
-// Backdrop close listener
+
 backdrop.addEventListener("click", () => {
   if (currentlyExpandedBtn) currentlyExpandedBtn.click();
 });
 
-// 🚪 Exit Single Date View helper
+
 const exitSingleDateMode = () => {
   isViewingSingleDate = false;
   backBtn.style.display = "none";
   loadMoreBtn.style.display = "inline-block";
 };
 
-// 🚀 Fetch Data (last 60 days)
+
 const fetchData = async () => {
   try {
     loading.style.display = "block";
@@ -58,7 +57,7 @@ const fetchData = async () => {
 
     const data = await res.json();
 
-    // ✅ Guard: NASA API returned an error object instead of an array
+   
     if (!Array.isArray(data)) {
       const errMsg = data?.error?.message || data?.msg || "Unexpected API response";
       console.error("NASA API Error:", data);
@@ -66,7 +65,6 @@ const fetchData = async () => {
       return;
     }
 
-    // ✅ 1. Initialize liked & favorited state on every item
     apodData = data.map(item => ({
       ...item,
       liked: false,
@@ -81,7 +79,7 @@ const fetchData = async () => {
   }
 };
 
-// 📅 Fetch Single Date
+
 datePicker.addEventListener('change', async () => {
   const date = datePicker.value;
 
@@ -104,11 +102,10 @@ datePicker.addEventListener('change', async () => {
 
     loading.style.display = "none";
 
-    // Handle NASA API errors (e.g., future dates)
+  
     if (data.code || !data.title) {
       container.innerHTML = `<p style="color: red; font-weight: bold; text-align: center;">No data found: ${data.msg || "Invalid response"}</p>`;
 
-      // We still want to show the back button so the user can return!
       isViewingSingleDate = true;
       backBtn.style.display = "inline-block";
       backBtn.innerText = "⬅ Back to All Dates";
@@ -121,7 +118,6 @@ datePicker.addEventListener('change', async () => {
     backBtn.innerText = "⬅ Back to All Dates";
     loadMoreBtn.style.display = "none";
 
-    // ✅ Ensure single-date item also has liked/favorited state
     const singleItem = { ...data, liked: false, favorited: false };
     renderData([singleItem], false, true);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -137,13 +133,13 @@ backBtn.onclick = () => {
   exitSingleDateMode();
   currentView = "all";
   renderData(apodData, false, false);
-  searchInput.value = ""; // Also clear search just in case
+  searchInput.value = ""; 
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-// 🎨 Render (with error handling)
+
 const renderData = (data, append = false, isSingleDate = false) => {
-  if (currentlyExpandedBtn) currentlyExpandedBtn.click(); // Safety cleanup
+  if (currentlyExpandedBtn) currentlyExpandedBtn.click(); 
 
   if (!append) {
     container.innerHTML = "";
@@ -156,7 +152,6 @@ const renderData = (data, append = false, isSingleDate = false) => {
     container.classList.remove('single-date-view');
   }
 
-  // ✅ 7. Handle empty filtered results
   if (data.length === 0) {
     container.innerHTML = `<p style="text-align:center; font-size:1.2rem; padding: 40px; opacity: 0.7;">No items found</p>`;
     return;
@@ -164,10 +159,9 @@ const renderData = (data, append = false, isSingleDate = false) => {
 
   const slice = data.slice(currentIndex, currentIndex + itemsPerLoad);
 
-  // ✅ 8. Use map() + forEach — no raw loops
   slice.forEach(item => {
-    if (!item.url) return; // skip missing data
-    if (!isSingleDate && item.media_type === "video") return; // skip videos in normal view
+    if (!item.url) return; 
+    if (!isSingleDate && item.media_type === "video") return; 
 
     const card = document.createElement("div");
     card.style.margin = "20px";
@@ -177,19 +171,18 @@ const renderData = (data, append = false, isSingleDate = false) => {
 
     let media;
 
-    // 📸 Image
+
     if (item.media_type === "image") {
       media = document.createElement("img");
       media.src = item.url;
       media.style.width = "300px";
 
-      // ❌ Skip if image fails
       media.onerror = () => {
         card.remove();
       };
     }
 
-    // 🎥 Video
+
     else {
       if (isSingleDate) {
         media = document.createElement("p");
@@ -198,14 +191,14 @@ const renderData = (data, append = false, isSingleDate = false) => {
         media.style.fontWeight = "bold";
         media.style.padding = "20px 0";
       } else {
-        return; // fallback safeguard
+        return; 
       }
     }
 
     const desc = document.createElement("p");
     desc.innerText = item.explanation.substring(0, 100) + "...";
 
-    // 📖 View More
+   
     const viewBtn = document.createElement("button");
     viewBtn.innerText = "View More";
 
@@ -214,7 +207,7 @@ const renderData = (data, append = false, isSingleDate = false) => {
       expanded = !expanded;
       if (expanded) {
         if (currentlyExpandedBtn && currentlyExpandedBtn !== viewBtn) {
-          currentlyExpandedBtn.click(); // close the old one
+          currentlyExpandedBtn.click(); 
         }
         currentlyExpandedBtn = viewBtn;
 
@@ -222,7 +215,7 @@ const renderData = (data, append = false, isSingleDate = false) => {
         backdrop.classList.add("active");
         desc.innerText = item.explanation;
         viewBtn.innerText = "Close View";
-        document.body.style.overflow = "hidden"; // Prevent background scrolling
+        document.body.style.overflow = "hidden"; 
       } else {
         currentlyExpandedBtn = null;
         card.classList.remove("expanded-card");
@@ -233,7 +226,6 @@ const renderData = (data, append = false, isSingleDate = false) => {
       }
     };
 
-    // ✅ 2. Like button — toggles item.liked on the data object
     const likeBtn = document.createElement("button");
     likeBtn.innerText = item.liked ? "❤️ Liked" : "🤍 Like";
 
@@ -249,7 +241,7 @@ const renderData = (data, append = false, isSingleDate = false) => {
       }
     };
 
-    // ✅ 2. Favorite button — toggles item.favorited on the data object
+
     const favBtn = document.createElement("button");
     favBtn.innerText = item.favorited ? "🌟 Favorited" : "⭐ Favorite";
 
@@ -272,12 +264,10 @@ const renderData = (data, append = false, isSingleDate = false) => {
   currentIndex += itemsPerLoad;
 };
 
-// 🔽 Load More
 loadMoreBtn.onclick = () => {
   renderData(apodData, true);
 };
 
-// ✅ 3 & 4. Filter: Show Liked
 showLikedBtn.onclick = () => {
   exitSingleDateMode();
   currentView = "liked";
@@ -288,7 +278,6 @@ showLikedBtn.onclick = () => {
   loadMoreBtn.style.display = "none";
 };
 
-// ✅ 3 & 4. Filter: Show Favorites
 showFavoritesBtn.onclick = () => {
   exitSingleDateMode();
   currentView = "favorites";
@@ -299,7 +288,7 @@ showFavoritesBtn.onclick = () => {
   loadMoreBtn.style.display = "none";
 };
 
-// 🔍 Search
+
 searchInput.addEventListener("input", () => {
   exitSingleDateMode();
   currentView = searchInput.value ? "search" : "all";
@@ -311,7 +300,7 @@ searchInput.addEventListener("input", () => {
 });
 
 
-// 📊 Sort
+
 sortDropdown.addEventListener("change", (e) => {
   exitSingleDateMode();
   currentView = "sorted";
@@ -322,8 +311,6 @@ sortDropdown.addEventListener("change", (e) => {
   }
 });
 
-// 🌙 Dark Mode State Management
-// Determine initial state based on storage, default is dark (black)
 if (localStorage.getItem("theme") === "light") {
   document.body.style.backgroundColor = "white";
   document.body.style.color = "black";
@@ -350,11 +337,10 @@ toggleBtn.onclick = () => {
 
 
 
-// 🔄 Auto UI Rotation (30s)
 setInterval(() => {
   if (apodData.length === 0) return;
   if (isViewingSingleDate) return;
-  if (currentView !== "all") return; // Keep data static while user interacts with filters/search
+  if (currentView !== "all") return; 
 
   const next = apodData.slice(displayIndex, displayIndex + 16);
   renderData(next, false);
@@ -364,5 +350,5 @@ setInterval(() => {
 
 }, 60000);
 
-// 🚀 Start
+
 fetchData();
